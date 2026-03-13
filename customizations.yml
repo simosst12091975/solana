@@ -4,6 +4,19 @@
   become: yes
 
   tasks:
+
+    - name: Ensure conntrack module is loaded
+      community.general.modprobe:
+        name: nf_conntrack
+        state: present
+
+    - name: Set conntrack max limit
+      ansible.posix.sysctl:
+        name: net.netfilter.nf_conntrack_max
+        value: '1048576'
+        state: present
+        reload: yes
+    
     - name: Update sysctl parameters
       sysctl:
         name: "{{ item.name }}"
