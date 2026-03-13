@@ -25,12 +25,13 @@
         echo 'GOVERNOR="performance"' > /etc/default/cpufrequtils
 
     - name: Enable amd_pstate driver
-        - name: Configure GRUB for AMD P-State and C-States
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/default/grub
         regexp: '^GRUB_CMDLINE_LINUX='
         line: 'GRUB_CMDLINE_LINUX="amd_pstate=active processor.max_cstate=0"'
-      notify: update grub
+
+    - name: Configure GRUB for AMD P-State and C-States
+      ansible.builtin.command: update-grub
 
     - name: Configure SSH security
       lineinfile:
